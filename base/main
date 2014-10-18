@@ -1,0 +1,90 @@
+#include <iostream>
+#include <math.h> 
+#include <string>
+using namespace std;
+
+class HERO {
+	string HeroName;
+	double Level;
+	double Experience;
+	double HealthPoints;
+	double ManaPoints;
+	double SpellPower;
+	double NextLevelExperience;
+	double ExperienceToNextLevel;
+
+public:
+	HERO(){
+		HeroName = "";
+		Level = 1;
+		Experience = 1;
+		HealthPoints = 0;
+		ManaPoints = 0;
+		SpellPower = 0;
+		NextLevelExperience = 0;
+		ExperienceToNextLevel = 0;
+	};
+
+	string PrintableName(){
+		return HeroName;
+	}
+
+	void initHERO(string Name) {
+		HeroName = NameOfTheHero(Name);
+		Experience = 1;
+		Level = 1 + round(Experience / 100 * Level);
+		HealthPoints = 10 + Level * 5;
+		ManaPoints = 3 + Level * 2;
+		SpellPower = 0 + Level * 1;
+		NextLevelExperience = (rand() % 100 + Level ) * Level;
+		ExperienceToNextLevel = NextLevelExperience - Experience;
+		cout << "The mighty hero " << HeroName << " was born with " << HealthPoints << " HealthPoints." << endl;
+	}
+
+	string NameOfTheHero(string Name) {
+		return Name;
+	};
+
+	double HealSelf(double HealAmount) {
+		return HealthPoints + HealAmount;
+	};
+	
+	double DamageSelf( double DamageAmount) {
+		return HealthPoints - DamageAmount;
+	};
+
+	bool Dead() {
+		if (HealthPoints <= 0)
+			return true;
+		else
+			return false;
+	};
+};
+
+class Creature
+{
+private:
+	double Level;
+	double HealthPoints;
+	double ManaPoints;
+public:
+	Creature(){
+		Level = 1;
+		HealthPoints = 0;
+		ManaPoints = 0;
+	};
+
+	double DamageSelf(double DamageAmount){
+		return HealthPoints - DamageAmount;
+	};
+	
+};
+
+int main(int argc, char const *argv[])
+{
+	HERO Vortelf;
+	Vortelf.initHERO("Vortelf");
+	cout << Vortelf.PrintableName << '\n' ;
+
+	return 0;
+}
