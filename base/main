@@ -3,17 +3,20 @@
 #include <string>
 using namespace std;
 
+
 class HERO {
+public:
 	string HeroName;
 	double Level;
 	double Experience;
 	double HealthPoints;
 	double ManaPoints;
 	double SpellPower;
+	double Damage;
+	double Armor;
 	double NextLevelExperience;
 	double ExperienceToNextLevel;
 
-public:
 	HERO(){
 		HeroName = "";
 		Level = 1;
@@ -21,13 +24,15 @@ public:
 		HealthPoints = 0;
 		ManaPoints = 0;
 		SpellPower = 0;
+		Damage = 0;
+		Armor = 0;
 		NextLevelExperience = 0;
 		ExperienceToNextLevel = 0;
 	};
 
-	string PrintableName(){
-		return HeroName;
-	}
+	string NameOfTheHero(string Name) {
+		return Name;
+	};
 
 	void initHERO(string Name) {
 		HeroName = NameOfTheHero(Name);
@@ -36,21 +41,32 @@ public:
 		HealthPoints = 10 + Level * 5;
 		ManaPoints = 3 + Level * 2;
 		SpellPower = 0 + Level * 1;
+		Damage = Damage + Level * 5;
 		NextLevelExperience = (rand() % 100 + Level ) * Level;
 		ExperienceToNextLevel = NextLevelExperience - Experience;
 		cout << "The mighty hero " << HeroName << " was born with " << HealthPoints << " HealthPoints." << endl;
+		cout << "He has " << Damage << " damage and " << ManaPoints << " mana!" << endl; 
 	}
 
-	string NameOfTheHero(string Name) {
-		return Name;
-	};
+	string PrintableName(){
+		return HeroName;
+	}
+
+	double HeroLevel() {
+		return Level;
+	}
 
 	double HealSelf(double HealAmount) {
-		return HealthPoints + HealAmount;
+		ManaPoints -= HealAmount;
+		HealthPoints += HealAmount;
+		cout << HeroName << " healed himself for " << HealAmount << " HP and currently have " << HealthPoints << " health points." << endl;
+		return HealthPoints;
 	};
 	
 	double DamageSelf( double DamageAmount) {
-		return HealthPoints - DamageAmount;
+		HealthPoints -= DamageAmount;
+		cout << HeroName << " was hit for " << DamageAmount << " Damage with " << HealthPoints << "HP left." << endl;
+		return HealthPoints;
 	};
 
 	bool Dead() {
@@ -63,28 +79,80 @@ public:
 
 class Creature
 {
-private:
+public:
+	string CreatureName;
 	double Level;
 	double HealthPoints;
 	double ManaPoints;
-public:
+	double Damage;
+	double Armor;
+
 	Creature(){
+		CreatureName = "";
 		Level = 1;
 		HealthPoints = 0;
 		ManaPoints = 0;
+		Damage = 0;
+		Armor = 0;
+	};
+
+	string NameOfTheCreature(string Name) {
+		return Name;
+	};
+
+	void initCreature(double CreatureLevel, string Name) {
+		CreatureName = NameOfTheCreature(Name);
+		Level = CreatureLevel;
+		HealthPoints = 10 + Level * 5;
+		Damage = Damage + Level * 5;
+		cout << CreatureName << " has spawned!" << endl;
 	};
 
 	double DamageSelf(double DamageAmount){
-		return HealthPoints - DamageAmount;
+		HealthPoints -= DamageAmount;
+		cout << CreatureName << " was hit for " << DamageAmount << " Damage with " << HealthPoints << "HP left." << endl;
+		return HealthPoints;
+	};
+
+	bool Dead() {
+		if (HealthPoints <= 0)
+			return true;
+		else
+			return false;
 	};
 	
 };
 
-int main(int argc, char const *argv[])
+ void Battle(Creature Monster, HERO Hero) {
+ 	cout << "There is a " << Monster.CreatureName << " before " << Hero.HeroName << endl;
+
+	while ( Hero.Dead() == false and Monster.Dead() == false) {
+		cout << '\n';
+
+	 	Hero.DamageSelf(Monster.Damage);
+	 	Monster.DamageSelf(Hero.Damage);
+	 	if (Hero.ManaPoints >= 5)
+	 		Hero.HealSelf(Hero.ManaPoints);
+	 	
+	 	cout << '\n';
+	};
+
+	if(Monster.Dead() == true)
+		cout << Hero.HeroName << " defeated " << Monster.CreatureName << ".\n";
+	else
+		cout << "You were defeated!" << endl;
+
+}
+
+int main()
 {
 	HERO Vortelf;
+	Creature Zombie;
 	Vortelf.initHERO("Vortelf");
-	cout << Vortelf.PrintableName << '\n' ;
+	Zombie.initCreature(1,"Zombie");
+	//cout << Vortelf.PrintableName << endl;
+
+	Battle(Zombie,Vortelf);
 
 	return 0;
 }
