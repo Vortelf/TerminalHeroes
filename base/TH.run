@@ -1,0 +1,2 @@
+g++ main.cpp -o TerminalHeroes-Alpha && ./TerminalHeroes-Alpha
+g++ Weapons.cpp -o TerminalHeroes-Alpha-Weapon-Core && ./TerminalHeroes-Alpha-Weapon-Core
